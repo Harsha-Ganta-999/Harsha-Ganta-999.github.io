@@ -6,14 +6,15 @@
 <title>My Portfolio</title>
 <style>
 /* Animated Text */
-@keyframes typing {
-  from { width: 0; }
-}
-
-#typing-text {
+.typing-text {
   overflow: hidden;
   white-space: nowrap;
+  border-right: 4px solid orange; /* Typing cursor effect */
   animation: typing 3s steps(30, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
 }
 
 @keyframes blink-caret {
@@ -42,8 +43,14 @@
 
 /* mix-blend-mode */
 .overlay {
+  background: url('background.jpg') center/cover no-repeat;
   background-color: rgba(255, 255, 255, 0.5);
   mix-blend-mode: overlay;
+  height: 300px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Hamburger Menu */
@@ -51,101 +58,110 @@
   display: none;
 }
 
+.menu-icon {
+  display: none;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
-    cursor: pointer;
+  }
+
+  .menu-icon {
+    display: block;
   }
 
   .menu {
     display: none;
   }
 
-  .bar {
-    width: 25px;
-    height: 3px;
-    background-color: #333;
-    margin: 4px 0;
-    transition: 0.4s;
+  .menu:checked + .menu-icon + .menu {
+    display: block;
   }
 
-  .change .bar {
-    transform: rotate(-45deg) translate(-5px, 5px);
+  .menu-icon:before {
+    content: "\2630";
   }
 
-  .change .bar:nth-child(2) {
-    opacity: 0;
-  }
-
-  .change .bar:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -5px);
+  .menu-icon::after {
+    content: "Menu";
+    margin-left: 5px;
   }
 
   .menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #f9f9f9;
-    width: 100%;
-    padding: 10px;
-    transition: max-height 0.5s ease-out;
-    overflow: hidden;
-    max-height: 0;
+    list-style-type: none;
+  }
+
+  .menu li {
+    margin-bottom: 10px;
   }
 
   .menu a {
-    display: block;
-    padding: 10px 20px;
     text-decoration: none;
     color: #333;
   }
 
   .menu a:hover {
-    background-color: #ddd;
-  }
-
-  .menu-toggle:checked + .menu {
-    max-height: 500px;
+    color: #45a049;
   }
 }
 
 /* Animated Cards */
 .card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 10px;
   transition: transform 0.3s ease;
 }
 
 .card:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 /* Animated Profile Cards */
-.card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.8s;
+.profile-card {
+  perspective: 1000px;
+  display: inline-block;
 }
 
-.card:hover .card-inner {
+.profile-card-inner {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.profile-card:hover .profile-card-inner {
   transform: rotateY(180deg);
 }
 
-.card-front, .card-back {
+.profile-card-front,
+.profile-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
 }
 
-.card-back {
+.profile-card-front {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+}
+
+.profile-card-back {
+  background-color: #45a049;
+  color: white;
   transform: rotateY(180deg);
 }
 </style>
 </head>
 <body>
 <!-- Animated Text -->
-<h1><span id="typing-text"></span></h1>
+<h1><span class="typing-text">Hello, world!</span></h1>
 
 <!-- Animated Buttons -->
 <button class="btn">Button 1</button>
@@ -156,7 +172,7 @@
 
 <!-- Hamburger Menu -->
 <input type="checkbox" class="menu-toggle" id="menu-toggle">
-<label for="menu-toggle" class="menu-icon">&#9776;</label>
+<label for="menu-toggle" class="menu-icon">&#9776; Menu</label>
 <ul class="menu">
   <li><a href="#">Home</a></li>
   <li><a href="#">About</a></li>
@@ -169,21 +185,26 @@
 <div class="card">Card 2</div>
 
 <!-- Animated Profile Cards -->
-<div class="card">
-  <div class="card-inner">
-    <div class="card-front">Front Content</div>
-    <div class="card-back">Back Content</div>
+<div class="profile-card">
+  <div class="profile-card-inner">
+    <div class="profile-card-front">
+      <h2>Front Content</h2>
+    </div>
+    <div class="profile-card-back">
+      <h2>Back Content</h2>
+    </div>
   </div>
 </div>
 
-<!-- JavaScript for Animated Text -->
 <script>
+// JavaScript for Animated Text
 const text = "Hello, world!";
 let index = 0;
+const typingText = document.querySelector('.typing-text');
 
 function typeWriter() {
   if (index < text.length) {
-    document.getElementById("typing-text").innerHTML += text.charAt(index);
+    typingText.innerHTML += text.charAt(index);
     index++;
     setTimeout(typeWriter, 100);
   }
@@ -193,3 +214,4 @@ typeWriter();
 </script>
 </body>
 </html>
+
