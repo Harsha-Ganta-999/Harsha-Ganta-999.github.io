@@ -59,9 +59,10 @@
    * Scrool with ofset on links with a class name .scrollto
    */
   on('click', '#navbar .nav-link', function(e) {
-    let section = select(this.hash)
-    if (section) {
       e.preventDefault()
+
+      if (this.hash && this.hash !== '' && this.hash.startsWith('#')) {
+        let section = select(this.hash);
 
       let navbar = select('#navbar')
       let header = select('#header')
